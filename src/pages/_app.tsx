@@ -1,10 +1,11 @@
-import { GeistSans } from "geist/font/sans";
-import { type AppType } from "next/app";
-import { ThemeProvider } from "next-themes";
+import { GeistSans } from 'geist/font/sans'
+import { type AppType } from 'next/app'
+import { ThemeProvider } from 'next-themes'
 
-import { api } from "@/utils/api";
+import { api } from '@/utils/api'
 
-import "@/styles/globals.css";
+import '@/styles/globals.css'
+import { Toaster } from '@/components/ui/toaster'
 
 const MyApp: AppType = ({ Component, pageProps }) => {
   return (
@@ -16,9 +17,10 @@ const MyApp: AppType = ({ Component, pageProps }) => {
         disableTransitionOnChange
       >
         <Component {...pageProps} />
+        <Toaster />
       </ThemeProvider>
     </div>
-  );
-};
+  )
+}
 
-export default api.withTRPC(MyApp);
+export default api.withTRPC(MyApp)

@@ -1,8 +1,12 @@
-import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
-import { TaskService } from "../services/task.service";
+import { createTRPCRouter, publicProcedure } from '@/server/api/trpc'
+import { TaskService } from '../services/task.service'
+import { TaskCreateInputSchema } from '../dto/task.dto'
 
-export const postRouter = createTRPCRouter({
+export const taskRouter = createTRPCRouter({
   find: publicProcedure.query(() => {
-    return TaskService.find();
+    return TaskService.find()
   }),
-});
+  create: publicProcedure.input(TaskCreateInputSchema).mutation(({ input }) => {
+    return TaskService.create(input)
+  }),
+})
