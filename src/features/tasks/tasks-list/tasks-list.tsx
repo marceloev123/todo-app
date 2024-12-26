@@ -2,13 +2,15 @@
 
 import * as React from 'react'
 import { flexRender } from '@tanstack/react-table'
-import { ChevronDown } from 'lucide-react'
+import { ChevronDown, MoreHorizontal } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { Input } from '@/components/ui/input'
@@ -22,13 +24,16 @@ import {
 } from '@/components/ui/table'
 import { type Task } from '@/server/api/dto/task.dto'
 import { useTasksTable } from './useTasksTable'
+import { useModalStore } from '@/stores/modal-store'
 
 interface TasksListProps {
   data: Task[]
+  onSelectTask: (taskId: string) => void
 }
 
-export function TasksList({ data }: TasksListProps) {
+export function TasksList({ data, onSelectTask }: TasksListProps) {
   const { table, columnsLength } = useTasksTable(data)
+  const setMode = useModalStore((state) => state.setMode)
 
   return (
     <div className="w-full">
@@ -105,6 +110,28 @@ export function TasksList({ data }: TasksListProps) {
                       )}
                     </TableCell>
                   ))}
+                  <TableCell>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant="ghost" className="h-8 w-8 p-0">
+                          <span className="sr-only">Open menu</span>
+                          <MoreHorizontal />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end">
+                        <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                        <DropdownMenuItem
+                          onClick={() => {
+                            onSelectTask(row.original.id)
+                            setMode('update')
+                          }}
+                        >
+                          Edit
+                        </DropdownMenuItem>
+                        <DropdownMenuItem>Delete</DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </TableCell>
                 </TableRow>
               ))
             ) : (

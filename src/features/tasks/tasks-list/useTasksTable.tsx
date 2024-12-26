@@ -1,6 +1,7 @@
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { type Task } from '@/server/api/dto/task.dto'
+import { useModalStore } from '@/stores/modal-store'
 import { Checkbox } from '@radix-ui/react-checkbox'
 import {
   type ColumnFiltersState,
@@ -70,9 +71,12 @@ const columns: ColumnDef<Task>[] = [
   },
   {
     accessorKey: 'storypoints',
-    header: 'Story Points',
+    header: () => {
+      return <div className="text-center">Story Points</div>
+    },
+
     cell: ({ row }) => {
-      return <div>{row.getValue('storypoints')}</div>
+      return <div className="text-center">{row.getValue('storypoints')}</div>
     },
   },
 ]
@@ -82,6 +86,8 @@ export const useTasksTable = (data: Task[]) => {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
   const [rowSelection, setRowSelection] = useState({})
+
+  const seIsOpen = useModalStore((state) => state.setIsOpen)
 
   const table = useReactTable<Task>({
     data,
@@ -99,6 +105,9 @@ export const useTasksTable = (data: Task[]) => {
       columnFilters,
       columnVisibility,
       rowSelection,
+    },
+    meta: {
+      seIsOpen,
     },
   })
 
